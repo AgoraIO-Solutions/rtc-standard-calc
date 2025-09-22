@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agora RTC Standard Duration Calculator</title>
+    <title>Standard Duration Calculator</title>
     <style>
         * {
             margin: 0;
@@ -36,8 +36,24 @@
         }
 
         .header {
-            text-align: center;
+            display: flex;
+            align-items: center;
             margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .header-logo {
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
         }
 
         .header h1 {
@@ -257,6 +273,16 @@
                 padding: 10px;
             }
             
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .header-logo img {
+                height: 35px;
+            }
+            
             .header h1 {
                 font-size: 1.5rem;
             }
@@ -304,6 +330,14 @@
                 padding: 8px;
             }
             
+            .header {
+                gap: 10px;
+            }
+            
+            .header-logo img {
+                height: 30px;
+            }
+            
             .header h1 {
                 font-size: 1.3rem;
             }
@@ -343,8 +377,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Agora RTC Standard Duration Calculator</h1>
-            <p>Calculate standard duration for different roles and video types</p>
+            <div class="header-logo">
+                <img src="https://cdn.prod.website-files.com/660affa848e8af81bdd03909/66ab7f671fb90c022fb7f1dc_Agora%20Logo%20Crisp-p-500.png" alt="Agora Logo" />
+            </div>
+            <div class="header-content">
+                <h1>Standard Duration Calculator</h1>
+                <p>Calculate standard duration for different roles and video types</p>
+            </div>
         </div>
         
         <div class="content-wrapper">
