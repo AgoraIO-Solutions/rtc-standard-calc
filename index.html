@@ -538,31 +538,35 @@
             let hostTotal = 0;
             let broadcastTotal = 0;
 
-            // Calculate for each role
-            Object.keys(coefficients).forEach(role => {
-                let roleTotal = 0;
+            // Calculate host/interactive (they use same inputs and coefficients)
+            Object.keys(coefficients.host).forEach(type => {
+                const inputId = inputMappings.host[type];
+                const input = document.getElementById(inputId);
+                const minutes = parseFloat(input.value) || 0;
+                const coefficient = coefficients.host[type];
+                const standardMinutes = minutes * coefficient;
+                hostTotal += standardMinutes;
                 
-                Object.keys(coefficients[role]).forEach(type => {
-                    const inputId = inputMappings[role][type];
-                    const input = document.getElementById(inputId);
-                    const minutes = parseFloat(input.value) || 0;
-                    const coefficient = coefficients[role][type];
-                    const standardMinutes = minutes * coefficient;
-                    roleTotal += standardMinutes;
-                    
-                    // Update individual calculation results
-                    updateCalculationResult(role, type, minutes, coefficient);
-                });
-
-                // Update role totals
-                if (role === 'host') {
-                    hostTotal = roleTotal;
-                    document.getElementById('host-total').textContent = formatNumber(roleTotal);
-                } else if (role === 'broadcast') {
-                    broadcastTotal = roleTotal;
-                    document.getElementById('broadcast-total').textContent = formatNumber(roleTotal);
-                }
+                // Update individual calculation results
+                updateCalculationResult('host', type, minutes, coefficient);
             });
+
+            // Calculate broadcast
+            Object.keys(coefficients.broadcast).forEach(type => {
+                const inputId = inputMappings.broadcast[type];
+                const input = document.getElementById(inputId);
+                const minutes = parseFloat(input.value) || 0;
+                const coefficient = coefficients.broadcast[type];
+                const standardMinutes = minutes * coefficient;
+                broadcastTotal += standardMinutes;
+                
+                // Update individual calculation results
+                updateCalculationResult('broadcast', type, minutes, coefficient);
+            });
+
+            // Update role totals
+            document.getElementById('host-total').textContent = formatNumber(hostTotal);
+            document.getElementById('broadcast-total').textContent = formatNumber(broadcastTotal);
 
             // Calculate grand total
             const grandTotal = hostTotal + broadcastTotal;
