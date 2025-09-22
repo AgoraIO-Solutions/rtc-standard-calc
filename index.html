@@ -23,6 +23,9 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 15px;
+        }
+
+        .content-wrapper {
             display: grid;
             grid-template-columns: 1fr 300px;
             gap: 20px;
@@ -170,6 +173,8 @@
             margin-top: 15px;
         }
 
+
+
         .sidebar {
             position: sticky;
             top: 20px;
@@ -219,7 +224,7 @@
 
 
         @media (max-width: 1024px) {
-            .container {
+            .content-wrapper {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
@@ -254,15 +259,16 @@
 </head>
 <body>
     <div class="container">
-        <div class="main-content">
-            <div class="header">
-                <h1>Agora RTC Standard Duration Calculator</h1>
-                <p>Calculate standard duration for different roles and video types</p>
-            </div>
-
-            <div class="calculator">
+        <div class="header">
+            <h1>Agora RTC Standard Duration Calculator</h1>
+            <p>Calculate standard duration for different roles and video types</p>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="calculator">
                 <div class="role-section">
-                    <h2 class="role-title">Host</h2>
+                    <h2 class="role-title">Host / Interactive Live Audience</h2>
                     <div class="input-grid">
                         <div class="input-group">
                             <label for="host-audio">Audio</label>
@@ -288,37 +294,6 @@
                             <label for="host-2kplus">2K+</label>
                             <input type="number" id="host-2kplus" placeholder="0" min="0" step="0.01">
                             <div class="calculation-result" id="host-2kplus-result"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="role-section">
-                    <h2 class="role-title">Interactive Live Audience</h2>
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label for="interactive-audio">Audio</label>
-                            <input type="number" id="interactive-audio" placeholder="0" min="0" step="0.01">
-                            <div class="calculation-result" id="interactive-audio-result"></div>
-                        </div>
-                        <div class="input-group">
-                            <label for="interactive-hd">HD Video</label>
-                            <input type="number" id="interactive-hd" placeholder="0" min="0" step="0.01">
-                            <div class="calculation-result" id="interactive-hd-result"></div>
-                        </div>
-                        <div class="input-group">
-                            <label for="interactive-fullhd">Full HD</label>
-                            <input type="number" id="interactive-fullhd" placeholder="0" min="0" step="0.01">
-                            <div class="calculation-result" id="interactive-fullhd-result"></div>
-                        </div>
-                        <div class="input-group">
-                            <label for="interactive-2k">2K</label>
-                            <input type="number" id="interactive-2k" placeholder="0" min="0" step="0.01">
-                            <div class="calculation-result" id="interactive-2k-result"></div>
-                        </div>
-                        <div class="input-group">
-                            <label for="interactive-2kplus">2K+</label>
-                            <input type="number" id="interactive-2kplus" placeholder="0" min="0" step="0.01">
-                            <div class="calculation-result" id="interactive-2kplus-result"></div>
                         </div>
                     </div>
                 </div>
@@ -358,12 +333,8 @@
                     <h3>Standard Duration Results</h3>
                     <div class="result-grid">
                         <div class="result-item">
-                            <div class="label">Host Total</div>
+                            <div class="label">Host/Interactive Total</div>
                             <div class="value" id="host-total">0</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="label">Interactive Total</div>
-                            <div class="value" id="interactive-total">0</div>
                         </div>
                         <div class="result-item">
                             <div class="label">Broadcast Total</div>
@@ -372,10 +343,11 @@
                     </div>
                     <div class="total" id="grand-total">Total Standard Duration: 0 minutes</div>
                 </div>
-            </div>
-        </div>
 
-        <div class="sidebar">
+                </div>
+            </div>
+
+            <div class="sidebar">
             <div class="conversion-table">
                 <h3>Conversion Coefficients</h3>
                 <table class="table">
@@ -416,8 +388,11 @@
                         </tr>
                     </tbody>
                 </table>
+                <p style="color: #a0a0a0; font-size: 0.7rem; margin-top: 8px;">
+                    Note: Host and Interactive Live Audience are combined in the calculator above since they use identical coefficients
+                </p>
             </div>
-
+        </div>
         </div>
     </div>
 
@@ -439,11 +414,11 @@
                 '2kplus': 'host-2kplus'
             },
             interactive: {
-                audio: 'interactive-audio',
-                hd: 'interactive-hd',
-                fullhd: 'interactive-fullhd',
-                '2k': 'interactive-2k',
-                '2kplus': 'interactive-2kplus'
+                audio: 'host-audio',
+                hd: 'host-hd',
+                fullhd: 'host-fullhd',
+                '2k': 'host-2k',
+                '2kplus': 'host-2kplus'
             },
             broadcast: {
                 audio: 'broadcast-audio',
@@ -479,7 +454,6 @@
 
         function calculateStandardDuration() {
             let hostTotal = 0;
-            let interactiveTotal = 0;
             let broadcastTotal = 0;
 
             // Calculate for each role
@@ -502,9 +476,6 @@
                 if (role === 'host') {
                     hostTotal = roleTotal;
                     document.getElementById('host-total').textContent = formatNumber(roleTotal);
-                } else if (role === 'interactive') {
-                    interactiveTotal = roleTotal;
-                    document.getElementById('interactive-total').textContent = formatNumber(roleTotal);
                 } else if (role === 'broadcast') {
                     broadcastTotal = roleTotal;
                     document.getElementById('broadcast-total').textContent = formatNumber(roleTotal);
@@ -512,9 +483,10 @@
             });
 
             // Calculate grand total
-            const grandTotal = hostTotal + interactiveTotal + broadcastTotal;
+            const grandTotal = hostTotal + broadcastTotal;
             document.getElementById('grand-total').textContent = `Total Standard Duration: ${formatNumber(grandTotal)} minutes`;
         }
+
 
         // Add event listeners to all input fields
         document.addEventListener('DOMContentLoaded', function() {
