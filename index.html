@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agora RTC Standard Duration Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.4;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #00d4ff;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .calculator {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid #3a3a3a;
+        }
+
+        .role-section {
+            margin-bottom: 20px;
+        }
+
+        .role-title {
+            color: #00d4ff;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #3a3a3a;
+            padding-bottom: 6px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            color: #e0e0e0;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        .input-group input {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 8px 10px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #666;
+        }
+
+        .calculation-result {
+            color: #00d4ff;
+            font-size: 0.75rem;
+            margin-top: 4px;
+            text-align: center;
+            min-height: 16px;
+        }
+
+
+        .results {
+            background: #1a1a1a;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .results h3 {
+            color: #00d4ff;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #3a3a3a;
+        }
+
+        .result-item .label {
+            color: #a0a0a0;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+
+        .result-item .value {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .total {
+            background: #00d4ff;
+            color: #0a0a0a;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .conversion-table {
+            background: #2a2a2a;
+            border-radius: 6px;
+            padding: 15px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .conversion-table h3 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 6px 4px;
+            text-align: center;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .table th {
+            background: #1a1a1a;
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .table td {
+            color: #e0e0e0;
+        }
+
+        .table tr:hover {
+            background: #3a3a3a;
+        }
+
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .input-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="header">
+                <h1>Agora RTC Standard Duration Calculator</h1>
+                <p>Calculate standard duration for different roles and video types</p>
+            </div>
+
+            <div class="calculator">
+                <div class="role-section">
+                    <h2 class="role-title">Host</h2>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="host-audio">Audio</label>
+                            <input type="number" id="host-audio" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="host-audio-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="host-hd">HD Video</label>
+                            <input type="number" id="host-hd" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="host-hd-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="host-fullhd">Full HD</label>
+                            <input type="number" id="host-fullhd" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="host-fullhd-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="host-2k">2K</label>
+                            <input type="number" id="host-2k" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="host-2k-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="host-2kplus">2K+</label>
+                            <input type="number" id="host-2kplus" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="host-2kplus-result"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="role-section">
+                    <h2 class="role-title">Interactive Live Audience</h2>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="interactive-audio">Audio</label>
+                            <input type="number" id="interactive-audio" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="interactive-audio-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="interactive-hd">HD Video</label>
+                            <input type="number" id="interactive-hd" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="interactive-hd-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="interactive-fullhd">Full HD</label>
+                            <input type="number" id="interactive-fullhd" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="interactive-fullhd-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="interactive-2k">2K</label>
+                            <input type="number" id="interactive-2k" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="interactive-2k-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="interactive-2kplus">2K+</label>
+                            <input type="number" id="interactive-2kplus" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="interactive-2kplus-result"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="role-section">
+                    <h2 class="role-title">Broadcast Streaming Audience</h2>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="broadcast-audio">Audio</label>
+                            <input type="number" id="broadcast-audio" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="broadcast-audio-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="broadcast-hd">HD Video</label>
+                            <input type="number" id="broadcast-hd" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="broadcast-hd-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="broadcast-fullhd">Full HD</label>
+                            <input type="number" id="broadcast-fullhd" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="broadcast-fullhd-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="broadcast-2k">2K</label>
+                            <input type="number" id="broadcast-2k" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="broadcast-2k-result"></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="broadcast-2kplus">2K+</label>
+                            <input type="number" id="broadcast-2kplus" placeholder="0" min="0" step="0.01">
+                            <div class="calculation-result" id="broadcast-2kplus-result"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results">
+                    <h3>Standard Duration Results</h3>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">Host Total</div>
+                            <div class="value" id="host-total">0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Interactive Total</div>
+                            <div class="value" id="interactive-total">0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">Broadcast Total</div>
+                            <div class="value" id="broadcast-total">0</div>
+                        </div>
+                    </div>
+                    <div class="total" id="grand-total">Total Standard Duration: 0 minutes</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="conversion-table">
+                <h3>Conversion Coefficients</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Audio</th>
+                            <th>HD</th>
+                            <th>Full HD</th>
+                            <th>2K</th>
+                            <th>2K+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Host</td>
+                            <td>1</td>
+                            <td>4</td>
+                            <td>9</td>
+                            <td>16</td>
+                            <td>36</td>
+                        </tr>
+                        <tr>
+                            <td>Interactive</td>
+                            <td>1</td>
+                            <td>4</td>
+                            <td>9</td>
+                            <td>16</td>
+                            <td>36</td>
+                        </tr>
+                        <tr>
+                            <td>Broadcast</td>
+                            <td>0.57</td>
+                            <td>2</td>
+                            <td>4.57</td>
+                            <td>8</td>
+                            <td>18</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Conversion coefficients
+        const coefficients = {
+            host: { audio: 1, hd: 4, fullhd: 9, '2k': 16, '2kplus': 36 },
+            interactive: { audio: 1, hd: 4, fullhd: 9, '2k': 16, '2kplus': 36 },
+            broadcast: { audio: 0.57, hd: 2, fullhd: 4.57, '2k': 8, '2kplus': 18 }
+        };
+
+        // Input field mappings
+        const inputMappings = {
+            host: {
+                audio: 'host-audio',
+                hd: 'host-hd',
+                fullhd: 'host-fullhd',
+                '2k': 'host-2k',
+                '2kplus': 'host-2kplus'
+            },
+            interactive: {
+                audio: 'interactive-audio',
+                hd: 'interactive-hd',
+                fullhd: 'interactive-fullhd',
+                '2k': 'interactive-2k',
+                '2kplus': 'interactive-2kplus'
+            },
+            broadcast: {
+                audio: 'broadcast-audio',
+                hd: 'broadcast-hd',
+                fullhd: 'broadcast-fullhd',
+                '2k': 'broadcast-2k',
+                '2kplus': 'broadcast-2kplus'
+            }
+        };
+
+        // Type labels for display
+        const typeLabels = {
+            audio: 'Audio',
+            hd: 'HD Video',
+            fullhd: 'Full HD',
+            '2k': '2K',
+            '2kplus': '2K+'
+        };
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        }
+
+        function updateCalculationResult(role, type, minutes, coefficient) {
+            const resultElement = document.getElementById(`${role}-${type}-result`);
+            if (minutes > 0) {
+                const standardMinutes = minutes * coefficient;
+                resultElement.textContent = `${formatNumber(minutes)} × ${coefficient} = ${formatNumber(standardMinutes)}`;
+            } else {
+                resultElement.textContent = '';
+            }
+        }
+
+        function calculateStandardDuration() {
+            let hostTotal = 0;
+            let interactiveTotal = 0;
+            let broadcastTotal = 0;
+
+            // Calculate for each role
+            Object.keys(coefficients).forEach(role => {
+                let roleTotal = 0;
+                
+                Object.keys(coefficients[role]).forEach(type => {
+                    const inputId = inputMappings[role][type];
+                    const input = document.getElementById(inputId);
+                    const minutes = parseFloat(input.value) || 0;
+                    const coefficient = coefficients[role][type];
+                    const standardMinutes = minutes * coefficient;
+                    roleTotal += standardMinutes;
+                    
+                    // Update individual calculation results
+                    updateCalculationResult(role, type, minutes, coefficient);
+                });
+
+                // Update role totals
+                if (role === 'host') {
+                    hostTotal = roleTotal;
+                    document.getElementById('host-total').textContent = formatNumber(roleTotal);
+                } else if (role === 'interactive') {
+                    interactiveTotal = roleTotal;
+                    document.getElementById('interactive-total').textContent = formatNumber(roleTotal);
+                } else if (role === 'broadcast') {
+                    broadcastTotal = roleTotal;
+                    document.getElementById('broadcast-total').textContent = formatNumber(roleTotal);
+                }
+            });
+
+            // Calculate grand total
+            const grandTotal = hostTotal + interactiveTotal + broadcastTotal;
+            document.getElementById('grand-total').textContent = `Total Standard Duration: ${formatNumber(grandTotal)} minutes`;
+        }
+
+        // Add event listeners to all input fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const allInputs = document.querySelectorAll('input[type="number"]');
+            allInputs.forEach(input => {
+                input.addEventListener('input', calculateStandardDuration);
+                input.addEventListener('change', calculateStandardDuration);
+            });
+        });
+    </script>
+</body>
+</html>
