@@ -223,14 +223,27 @@
         }
 
 
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+            
+            .content-wrapper {
+                grid-template-columns: 1fr 280px;
+                gap: 15px;
+            }
+        }
+
         @media (max-width: 1024px) {
             .content-wrapper {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 20px;
             }
             
             .sidebar {
                 position: static;
+                order: -1;
             }
             
             .input-grid {
@@ -247,12 +260,74 @@
                 font-size: 1.5rem;
             }
             
+            .header p {
+                font-size: 0.9rem;
+            }
+            
             .input-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
             
             .result-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .role-title {
+                font-size: 1rem;
+            }
+            
+            .input-group label {
+                font-size: 0.75rem;
+            }
+            
+            .input-group input {
+                padding: 6px 8px;
+                font-size: 0.85rem;
+            }
+            
+            .calculation-result {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .header p {
+                font-size: 0.8rem;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .calculator {
+                padding: 15px;
+            }
+            
+            .results {
+                padding: 12px;
+            }
+            
+            .conversion-table {
+                padding: 12px;
+            }
+            
+            .table {
+                font-size: 0.7rem;
+            }
+            
+            .table th,
+            .table td {
+                padding: 4px 2px;
             }
         }
     </style>
