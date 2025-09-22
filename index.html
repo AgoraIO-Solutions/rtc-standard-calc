@@ -75,7 +75,7 @@
 
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 12px;
             margin-bottom: 15px;
         }
@@ -235,7 +235,7 @@
             }
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 992px) {
             .content-wrapper {
                 grid-template-columns: 1fr;
                 gap: 20px;
@@ -247,7 +247,7 @@
             }
             
             .input-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             }
         }
 
@@ -265,7 +265,7 @@
             }
             
             .input-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
                 gap: 10px;
             }
             
@@ -291,6 +291,13 @@
             }
         }
 
+        @media (max-width: 600px) {
+            .input-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 8px;
+            }
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 8px;
@@ -305,8 +312,8 @@
             }
             
             .input-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+                gap: 6px;
             }
             
             .calculator {
